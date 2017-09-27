@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Stock exchange</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="description" content="Stock exchange search.">
+    <meta name="keywords" content="Stock Exchange">
+    <meta name="author" content="Wojciech Pruszak">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4286f4">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/autosize@4.0.0/dist/autosize.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="form-group" style="margin-top: 15px;">
+        <textarea class="form-control" id="search-text" placeholder="XQuery"></textarea>
+    </div>
+    <a class="btn btn-default" id="search">Search</a>
+    <pre id="search-result" style="display: none; margin-top: 15px;"></pre>
+    <script type="text/javascript">
+        $.getScript("https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js");
+        $(function () {
+            $('#search').click(function () {
+                $.ajax({
+                    url: '/',
+                    method: 'POST',
+                    data: {
+                        q: $('#search-text').val()
+                    }
+                }).done(function (response) {
+                    if(!response) {
+                        alertify.log("No results found.");
+                        $('#search-result').hide();
+                    } else {
+                        $('#search-result').show().text(response);
+                    }
+                }).fail(function (response) {
+                    alertify.error("An error occurred: " + response);
+                });
+            });
+
+            var $searchText = $('#search-text');
+            autosize($searchText);
+            $searchText.keydown(function () {
+                autosize.update($searchText);
+            })
+        });
+    </script>
+</div>
+</body>
+</html>
